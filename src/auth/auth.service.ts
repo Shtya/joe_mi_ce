@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as argon2 from 'argon2';
-import { ERole } from 'enums/role.enum';
+import { ERole } from 'enums/Role.enum';
 import { User } from 'entities/user.entity';
 import { Role } from 'entities/role.entity';
 import { Project } from 'entities/project.entity';

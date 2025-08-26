@@ -6,7 +6,7 @@ import { Project } from 'entities/project.entity';
 import { User } from 'entities/user.entity';
 import { In, Repository } from 'typeorm';
 import { UUID } from 'crypto';
-import { ERole } from 'enums/role.enum';
+import { ERole } from 'enums/Role.enum';
 import { plainToInstance } from 'class-transformer';
 import { Shift } from 'entities/employee/shift.entity';
 

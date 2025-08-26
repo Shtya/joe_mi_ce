@@ -17,7 +17,7 @@ import { AuthService } from './auth.service';
 import { AuthGuard } from './auth.guard';
 import { RegisterDto, LoginDto, RefreshTokenDto, ViewUserPasswordDto, UpdateUserDto, UpdateUserRoleDto } from 'dto/user.dto';
 import { User } from 'entities/user.entity';
-import { ERole } from 'enums/role.enum';
+import { ERole } from 'enums/Role.enum';
 
 @Controller('')
 export class AuthController {

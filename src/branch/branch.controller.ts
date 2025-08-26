@@ -17,7 +17,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { PaginationQueryDto } from 'dto/pagination.dto';
 import { CRUD } from 'common/crud.service';
 import { UUID } from 'crypto';
-import { ERole } from 'enums/role.enum';
+import { ERole } from 'enums/Role.enum';
 
 @Controller('branches')
 @UseGuards(AuthGuard)

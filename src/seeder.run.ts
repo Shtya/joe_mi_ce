@@ -3,7 +3,7 @@ dotenv.config();
 import { User } from 'entities/user.entity';
 import { DataSource, Repository } from 'typeorm';
 import * as argon from 'argon2';
-import { ERole } from 'enums/role.enum';
+import { ERole } from 'enums/Role.enum';
 import { Role } from 'entities/role.entity';
 import { Permission } from 'entities/permissions.entity';
 import { Country } from 'entities/locations/country.entity';

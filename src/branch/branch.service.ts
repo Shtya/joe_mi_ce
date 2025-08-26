@@ -12,7 +12,7 @@ import { City } from 'entities/locations/city.entity';
 import { Project } from 'entities/project.entity';
 import { Repository } from 'typeorm';
 import { User } from 'entities/user.entity';
-import { ERole } from 'enums/role.enum';
+import { ERole } from 'enums/Role.enum';
 
 @Injectable()
 export class BranchService {
