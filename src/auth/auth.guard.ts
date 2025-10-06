@@ -6,7 +6,7 @@ import { I18nService } from 'nestjs-i18n';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'entities/user.entity';
- 
+
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = this.extractToken(request);
-    const requiredPermissions:any = this.reflector.get<string[]>('permissions', context.getHandler());
+    const requiredPermissions: any = this.reflector.get<string[]>('permissions', context.getHandler());
 
     if (!token) {
       throw new UnauthorizedException(this.i18n.t('events.auth.errors.unauthorized'));
@@ -27,9 +27,9 @@ export class AuthGuard implements CanActivate {
 
     try {
       const payload = await this.jwtService.verifyAsync(token, { secret: process.env.JWT_SECRET });
-      const user = await this.userRepository.findOne({ 
-        where: { id: payload.sub }, 
-        relations: ['role', 'role.permissions', 'project'] 
+      const user = await this.userRepository.findOne({
+        where: { id: payload.sub },
+        relations: ['role', 'role.permissions', 'project'],
       });
 
       if (!user) {
@@ -43,15 +43,33 @@ export class AuthGuard implements CanActivate {
       }
 
       if (requiredPermissions?.length) {
-        const hasPermission = await user.hasPermission(requiredPermissions);
-        if (!hasPermission) {
-          throw new ForbiddenException(
-            this.i18n.t('events.auth.errors.insufficient_permissions', {
-              args: { permissions: requiredPermissions.join(', ') }
-            })
-          );
+        const roleName = String(user?.role?.name ?? '').toLowerCase();
+
+        if (roleName !== 'super_admin') {
+          const userPermissions = new Set((user?.role?.permissions ?? []).map((p: any) => String(p?.name ?? '').toLowerCase()));
+          // هل عنده كل الـ requiredPermissions ؟
+          const hasPermission = requiredPermissions.every(perm => userPermissions.has(String(perm).toLowerCase()));
+
+          if (!hasPermission) {
+            throw new ForbiddenException(
+              this.i18n.t('events.auth.errors.insufficient_permissions', {
+                args: { permissions: requiredPermissions.join(', ') },
+              }),
+            );
+          }
         }
       }
+
+      // if (requiredPermissions?.length) {
+      //   const hasPermission = await user.hasPermission(requiredPermissions);
+      //   if (!hasPermission) {
+      //     throw new ForbiddenException(
+      //       this.i18n.t('events.auth.errors.insufficient_permissions', {
+      //         args: { permissions: requiredPermissions.join(', ') },
+      //       }),
+      //     );
+      //   }
+      // }
     } catch (error) {
       if (error instanceof ForbiddenException) throw error;
       throw new UnauthorizedException(this.i18n.t('events.auth.errors.invalid_token'));

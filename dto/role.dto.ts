@@ -10,9 +10,9 @@ export class CreateRoleDto {
   description?: string;
 
   @IsArray()
-  @IsNumber({}, { each: true })
+  @IsString({ each: true })
   @IsOptional()
-  permissionIds?: number[];
+  permissionIds?: any[];
 }
 
 export class UpdateRoleDto {
@@ -25,23 +25,23 @@ export class UpdateRoleDto {
   description?: string;
 
   @IsArray()
-  @IsNumber({}, { each: true })
+  @IsString({ each: true })
   @IsOptional()
-  permissionIds?: number[];
+  permissionIds?: any[];
 }
 
 export class AddPermissionsDto {
   @IsArray()
-  @IsNumber({}, { each: true })
+  @IsString({ each: true })
   @IsNotEmpty()
-  permissionIds: number[];
+  permissionIds: any[];
 }
 
 export class RemovePermissionsDto {
   @IsArray()
-  @IsNumber({}, { each: true })
+  @IsString({ each: true })
   @IsNotEmpty()
-  permissionIds: number[];
+  permissionIds: any[];
 }
 
 export class RoleResponseDto {

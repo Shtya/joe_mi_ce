@@ -17,7 +17,7 @@ export class AuthService {
     @InjectRepository(Role) private roleRepository: Repository<Role>,
     @InjectRepository(Project) private projectRepository: Repository<Project>,
     @InjectRepository(Branch) private branchRepository: Repository<Branch>,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) {}
 
   async register(requester: User | null, dto: RegisterDto) {
@@ -55,7 +55,7 @@ export class AuthService {
           image_url: dto.image_url,
           is_active: true,
           owner: null,
-        })
+        }),
       );
     } else if (dto.role !== ERole.SUPER_ADMIN) {
       const projectId = requester?.role.name === ERole.PROJECT_ADMIN ? requester.project.id : dto.project_id;
@@ -199,7 +199,26 @@ export class AuthService {
       relations: ['role', 'project', 'branch', 'created_by'],
     });
 
-    if (!userWithRelations) throw new UnauthorizedException('User not found');
+    if (!userWithRelations) throw new BadRequestException('User not found');
+
+    return {
+      id: userWithRelations.id,
+      username: userWithRelations.username,
+      role: userWithRelations.role.name,
+      project: userWithRelations.project,
+      branch: userWithRelations.branch,
+      created_by: userWithRelations.created_by,
+      mobile: userWithRelations.mobile,
+      is_active: userWithRelations.is_active,
+    };
+  }
+  async getUserById(userId: string) {
+    const userWithRelations = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['role', 'project', 'branch', 'created_by'],
+    });
+
+    if (!userWithRelations) throw new BadRequestException('User not found');
 
     return {
       id: userWithRelations.id,
@@ -233,12 +252,28 @@ export class AuthService {
 
     if (!user) throw new NotFoundException('User not found');
 
-    // 🔒 التأكد من أن المستخدم من نفس المشروع
-    if (requester.project.id !== user.project.id) {
-      throw new ForbiddenException('You can only delete users in your own project');
+     const isSuperAdmin = (requester?.role?.name?.toLowerCase?.() || "") === 'super_admin';
+
+    const targetRoleName = user?.role?.name?.toLowerCase?.();
+    if (targetRoleName && ['admin', 'super_admin'].includes(targetRoleName) && !isSuperAdmin) {
+      throw new ForbiddenException('Only super_admin can delete admin accounts');
     }
 
-    return await this.userRepository.remove(user);
+    if (requester.id === user.id) {
+      throw new ForbiddenException('You cannot delete your own account');
+    }
+
+    if (!isSuperAdmin) {
+      if (!requester.project_id) {
+        throw new ForbiddenException('Missing project context for requester');
+      }
+      if (user.project_id && requester.project_id !== user.project_id) {
+        throw new ForbiddenException('You can only delete users in your own project');
+      }
+    }
+
+    await this.userRepository.softDelete(user.id);
+    return { success: true, deletedUserId: user.id };
   }
 
   async updateUser(userId: any, dto: UpdateUserDto, requester: User) {

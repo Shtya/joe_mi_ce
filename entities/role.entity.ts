@@ -14,7 +14,12 @@ export class Role extends CoreEntity {
   @OneToMany(() => User, user => user.role)
   users: User[];
 
-  @ManyToMany(() => Permission, permission => permission.roles, { eager: true })
+  @ManyToMany(() => Permission, permission => permission.roles, {
+    eager: true,
+    cascade: false,
+    onDelete: 'NO ACTION',
+    onUpdate: 'CASCADE',
+  })
   @JoinTable({
     name: 'role_permissions',
     joinColumn: { name: 'role_id' },

@@ -12,7 +12,7 @@ export class ShiftService {
     public readonly shiftRepo: Repository<Shift>,
 
     @InjectRepository(Project)
-    public readonly projectRepo: Repository<Project>
+    public readonly projectRepo: Repository<Project>,
   ) {}
 
   async create(dto: CreateShiftDto): Promise<Shift> {
@@ -31,7 +31,7 @@ export class ShiftService {
         {
           startTime: dto.startTime,
           endTime: dto.endTime,
-        }
+        },
       )
       .getOne();
 
@@ -70,7 +70,7 @@ export class ShiftService {
         {
           startTime: newStartTime,
           endTime: newEndTime,
-        }
+        },
       )
       .getOne();
 
@@ -88,4 +88,5 @@ export class ShiftService {
     Object.assign(shift, dto);
     return this.shiftRepo.save(shift);
   }
+ 
 }

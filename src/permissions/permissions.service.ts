@@ -20,7 +20,7 @@ export class PermissionsService extends BaseService<Permission>  {
     message: string;
     data: PermissionResponseDto[];
   }> {
-    const permissionNames = dto.permissions.map(p => p.name.toLowerCase());
+    const permissionNames = dto.permissions.map(p => p.name);
 
     const existingPermissions = await this.permissionRepository.createQueryBuilder('permission').where('LOWER(permission.name) IN (:...names)', { names: permissionNames }).getMany();
 
@@ -36,7 +36,7 @@ export class PermissionsService extends BaseService<Permission>  {
     const newPermissions = this.permissionRepository.create(
       dto.permissions.map(p => ({
         ...p,
-        name: p.name.toLowerCase(),
+        name: p.name,
       }))
     );
 
@@ -57,16 +57,16 @@ export class PermissionsService extends BaseService<Permission>  {
       throw new NotFoundException(this.i18n.t('events.permisstions.errors.permission_not_found'));
     }
 
-    if (dto.name && dto.name.toLowerCase() !== permission.name) {
+    if (dto.name && dto.name !== permission.name) {
       const existingPermission = await this.permissionRepository.findOne({
-        where: { name: dto.name.toLowerCase() },
+        where: { name: dto.name },
       });
 
       if (existingPermission) {
         throw new BadRequestException(this.i18n.t('events.permisstions.errors.permission_name_exists'));
       }
 
-      permission.name = dto.name.toLowerCase();
+      permission.name = dto.name;
     }
 
     if (dto.description !== undefined) {

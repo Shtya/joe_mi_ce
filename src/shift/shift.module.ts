@@ -4,9 +4,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ShiftController } from './shift.controller';
 import { Project } from 'entities/project.entity';
 import { Shift } from 'entities/employee/shift.entity';
+import { User } from 'entities/user.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Shift, Project])],
+  imports: [TypeOrmModule.forFeature([Shift, Project , User])],
   controllers: [ShiftController],
   providers: [ShiftService],
 })

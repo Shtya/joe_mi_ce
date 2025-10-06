@@ -18,6 +18,8 @@ import { AuthGuard } from './auth.guard';
 import { RegisterDto, LoginDto, RefreshTokenDto, ViewUserPasswordDto, UpdateUserDto, UpdateUserRoleDto } from 'dto/user.dto';
 import { User } from 'entities/user.entity';
 import { ERole } from 'enums/Role.enum';
+import { Permissions } from 'decorators/permissions.decorators';
+import { EPermission } from 'enums/Permissions.enum';
 
 @Controller('')
 export class AuthController {
@@ -56,9 +58,18 @@ export class AuthController {
   }
 
 
+  @UseGuards(AuthGuard)
+  @Get('users/:id')
+	@Permissions(EPermission.USER_READ)
+  async getUserById( @Param("id") userId : string) {
+    return this.authService.getUserById(userId);
+  }
+
+
 
   @UseGuards(AuthGuard)
   @Get('users')
+	@Permissions(EPermission.USER_READ)
   async getUsers(@Req() req: { user: User }) {
     return this.authService.getUsersCreatedByOrAll(req.user);
   }

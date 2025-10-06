@@ -27,6 +27,7 @@ import { VacationModule } from './vacation/vacation.module';
 import { AuditsModule } from './audit/audit.module';
 import { SurveyModule } from './survey/survey.module';
 import { SaleModule } from './sale/sale.module';
+import { ExportModule } from './export/export.module';
 
 @Module({
   imports: [
@@ -77,9 +78,12 @@ import { SaleModule } from './sale/sale.module';
     AuditsModule,
     SurveyModule,
     SaleModule,
+    ExportModule,
   ],
   controllers: [ApiController],
-  providers: [LoggingValidationPipe, QueryFailedErrorFilter],
+  providers: [
+		LoggingValidationPipe, QueryFailedErrorFilter
+	],
   exports: [LoggingValidationPipe],
 })
 export class AppModule {}

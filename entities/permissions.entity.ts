@@ -10,6 +10,9 @@ export class Permission extends CoreEntity {
   @Column({ nullable: true })
   description: string;
 
-  @ManyToMany(() => Role, role => role.permissions)
+  @ManyToMany(() => Role, role => role.permissions, {
+    onDelete: 'NO ACTION',
+    onUpdate: 'CASCADE',
+  })
   roles: Role[];
 }

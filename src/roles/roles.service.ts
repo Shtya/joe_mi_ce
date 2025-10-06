@@ -11,9 +11,9 @@ import { BaseService } from 'common/base.service';
 export class RolesService extends BaseService<Role> {
   constructor(
     @InjectRepository(Role)
-    private readonly roleRepository: Repository<Role>,
+    public readonly roleRepository: Repository<Role>,
     @InjectRepository(Permission)
-    private readonly permissionRepository: Repository<Permission>,
+    public readonly permissionRepository: Repository<Permission>,
      readonly i18n: I18nService
   ) {
     super(roleRepository);
@@ -103,7 +103,7 @@ export class RolesService extends BaseService<Role> {
     return this.mapToDto(updatedRole);
   }
 
-  private async validatePermissions(permissionIds: number[]): Promise<Permission[]> {
+  private async validatePermissions(permissionIds: string[]): Promise<Permission[]> {
     if (!permissionIds.length) return [];
 
     const permissions = await this.permissionRepository.find({

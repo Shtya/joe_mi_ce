@@ -6,11 +6,12 @@ import { Country } from 'entities/locations/country.entity';
 import { City } from 'entities/locations/city.entity';
 import { Region } from 'entities/locations/region.entity';
 import { Chain } from 'entities/locations/chain.entity';
- 
+import { User } from 'entities/user.entity';
+
 @Module({
-  imports: [TypeOrmModule.forFeature([Country, City, Region, Chain])],
+  imports: [TypeOrmModule.forFeature([Country, City, Region, Chain, User])],
   providers: [LocationsService],
   controllers: [LocationsController],
-  exports: [LocationsService], // Optional: Export if used elsewhere
+  exports: [LocationsService],
 })
 export class LocationsModule {}

@@ -17,6 +17,72 @@ import { Brand } from 'entities/products/brand.entity';
 import { Category } from 'entities/products/category.entity';
 import { Product } from 'entities/products/product.entity';
 import { Stock } from 'entities/products/stock.entity';
+import { EPermission } from 'enums/Permissions.enum';
+
+export const seedPermissions = async (dataSource: DataSource) => {
+  const permissionRepository = dataSource.getRepository(Permission);
+  const queryRunner = dataSource.createQueryRunner();
+
+  console.log('🚀 Seeding permissions...');
+  await queryRunner.query(`TRUNCATE TABLE "role_permissions" RESTART IDENTITY CASCADE;`);
+
+  // ✅ Step 2: Delete old permissions safely
+  await permissionRepository.delete({});
+
+  // ✅ Step 3: Prepare permissions from enum
+  const permissions = Object.values(EPermission).map(permission =>
+    permissionRepository.create({
+      name: permission,
+      description: `${permission
+        .split('_')
+        .map(w => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+        .join(' ')} permission`,
+    }),
+  );
+
+  // ✅ Step 4: Insert them
+  await permissionRepository.save(permissions);
+
+  console.log(`✅ Seeded ${permissions.length} permissions successfully`);
+};
+
+export const seedSuperAdminRole = async (dataSource: DataSource) => {
+  const roleRepository = dataSource.getRepository(Role);
+  const permissionRepository = dataSource.getRepository(Permission);
+
+  console.log('🚀 Checking Super Admin role...');
+
+  // ✅ Fetch all existing permissions
+  const allPermissions = await permissionRepository.find();
+  if (!allPermissions.length) {
+    throw new Error('⚠️ No permissions found. Please seed permissions first.');
+  }
+
+  // ✅ Check if SUPER_ADMIN exists
+  let superAdmin = await roleRepository.findOne({
+    where: { name: ERole.SUPER_ADMIN },
+    relations: ['permissions'],
+  });
+
+  // ✅ If not exist → create new
+  if (!superAdmin) {
+    superAdmin = roleRepository.create({
+      name: ERole.SUPER_ADMIN,
+      description: 'Full system access',
+      permissions: allPermissions,
+    });
+
+    await roleRepository.save(superAdmin);
+    console.log('🟢 Created Super Admin role and granted all permissions.');
+  } else {
+    // ✅ If exists → update its permissions (add all)
+    superAdmin.permissions = allPermissions;
+    await roleRepository.save(superAdmin);
+    console.log('🟢 Updated Super Admin role with all permissions.');
+  }
+
+  console.log('✅ Super Admin seeding complete.');
+};
 
 export const seedRoles = async (dataSource: DataSource) => {
   const roleRepository = dataSource.getRepository(Role);
@@ -173,7 +239,6 @@ export const seedProjects = async (dataSource: DataSource) => {
   const projectRepository = dataSource.getRepository(Project);
   const userRepository = dataSource.getRepository(User);
 
-
   const users = await userRepository.find();
   if (users.length < 2) {
     throw new Error('⚠️ Please seed at least 2 users to use as owner and supervisor');
@@ -238,31 +303,31 @@ export const seedBrands = async (dataSource: DataSource) => {
   const brandRepository = dataSource.getRepository(Brand);
 
   const brands = [
-    { 
-      name: 'Nike', 
-      description: 'Just Do It', 
-      logo_url: 'https://example.com/nike-logo.png' 
+    {
+      name: 'Nike',
+      description: 'Just Do It',
+      logo_url: 'https://example.com/nike-logo.png',
     },
-    { 
-      name: 'Adidas', 
-      description: 'Impossible is Nothing', 
-      logo_url: 'https://example.com/adidas-logo.png' 
+    {
+      name: 'Adidas',
+      description: 'Impossible is Nothing',
+      logo_url: 'https://example.com/adidas-logo.png',
     },
-    { 
-      name: 'Apple', 
-      description: 'Think Different', 
-      logo_url: 'https://example.com/apple-logo.png' 
+    {
+      name: 'Apple',
+      description: 'Think Different',
+      logo_url: 'https://example.com/apple-logo.png',
     },
-    { 
-      name: 'Samsung', 
-      description: 'Do What You Can\'t', 
-      logo_url: 'https://example.com/samsung-logo.png' 
+    {
+      name: 'Samsung',
+      description: "Do What You Can't",
+      logo_url: 'https://example.com/samsung-logo.png',
     },
-    { 
-      name: 'Puma', 
-      description: 'Forever Faster', 
-      logo_url: 'https://example.com/puma-logo.png' 
-    }
+    {
+      name: 'Puma',
+      description: 'Forever Faster',
+      logo_url: 'https://example.com/puma-logo.png',
+    },
   ];
 
   await brandRepository.save(brands);
@@ -273,42 +338,38 @@ export const seedCategories = async (dataSource: DataSource) => {
   const categoryRepository = dataSource.getRepository(Category);
 
   const categories = [
-    { 
-      name: 'Footwear', 
-      description: 'Shoes and related products' 
+    {
+      name: 'Footwear',
+      description: 'Shoes and related products',
     },
-    { 
-      name: 'Electronics', 
-      description: 'Electronic devices and accessories' 
+    {
+      name: 'Electronics',
+      description: 'Electronic devices and accessories',
     },
-    { 
-      name: 'Apparel', 
-      description: 'Clothing items' 
+    {
+      name: 'Apparel',
+      description: 'Clothing items',
     },
-    { 
-      name: 'Accessories', 
-      description: 'Fashion and tech accessories' 
+    {
+      name: 'Accessories',
+      description: 'Fashion and tech accessories',
     },
-    { 
-      name: 'Sports Equipment', 
-      description: 'Equipment for various sports' 
-    }
+    {
+      name: 'Sports Equipment',
+      description: 'Equipment for various sports',
+    },
   ];
 
   await categoryRepository.save(categories);
   console.log('✅ Seeded categories successfully');
 };
 
-
 export const seedProducts = async (dataSource: DataSource) => {
   const productRepository = dataSource.getRepository(Product);
   const brandRepository = dataSource.getRepository(Brand);
   const categoryRepository = dataSource.getRepository(Category);
 
-  const [brands, categories] = await Promise.all([
-    brandRepository.find(),
-    categoryRepository.find()
-  ]);
+  const [brands, categories] = await Promise.all([brandRepository.find(), categoryRepository.find()]);
 
   const nike = brands.find(b => b.name === 'Nike');
   const adidas = brands.find(b => b.name === 'Adidas');
@@ -325,36 +386,36 @@ export const seedProducts = async (dataSource: DataSource) => {
       brand: nike,
       category: footwear,
       is_high_priority: true,
-      image_url: 'https://example.com/airmax90.jpg'
+      image_url: 'https://example.com/airmax90.jpg',
     },
     {
       name: 'iPhone 13',
       brand: apple,
       category: electronics,
       is_high_priority: false,
-      image_url: 'https://example.com/iphone13.jpg'
+      image_url: 'https://example.com/iphone13.jpg',
     },
     {
       name: 'Ultraboost 21',
       brand: adidas,
       category: footwear,
       is_high_priority: true,
-      image_url: 'https://example.com/ultraboost.jpg'
+      image_url: 'https://example.com/ultraboost.jpg',
     },
     {
       name: 'Galaxy S21',
       brand: samsung,
       category: electronics,
       is_high_priority: true,
-      image_url: 'https://example.com/galaxys21.jpg'
+      image_url: 'https://example.com/galaxys21.jpg',
     },
     {
       name: 'Dry-Fit T-Shirt',
       brand: nike,
       category: apparel,
       is_high_priority: false,
-      image_url: 'https://example.com/dryfit-tshirt.jpg'
-    }
+      image_url: 'https://example.com/dryfit-tshirt.jpg',
+    },
   ];
 
   await productRepository.save(products);
@@ -366,10 +427,7 @@ export const seedStocks = async (dataSource: DataSource) => {
   const productRepository = dataSource.getRepository(Product);
   const branchRepository = dataSource.getRepository(Branch);
 
-  const [products, branches] = await Promise.all([
-    productRepository.find(),
-    branchRepository.find()
-  ]);
+  const [products, branches] = await Promise.all([productRepository.find(), branchRepository.find()]);
 
   const airMax = products.find(p => p.name === 'Air Max 90');
   const iphone = products.find(p => p.name === 'iPhone 13');
@@ -382,38 +440,37 @@ export const seedStocks = async (dataSource: DataSource) => {
       product: airMax,
       branch: branches[0], // First branch
       quantity: 50,
-      model: '2023-AM90-WHITE'
+      model: '2023-AM90-WHITE',
     },
     {
       product: iphone,
       branch: branches[1], // Second branch
       quantity: 25,
-      model: 'IP13-BLACK-128'
+      model: 'IP13-BLACK-128',
     },
     {
       product: ultraboost,
       branch: branches[0],
       quantity: 30,
-      model: 'UB21-RED'
+      model: 'UB21-RED',
     },
     {
       product: galaxy,
       branch: branches[1],
       quantity: 20,
-      model: 'GS21-GRAY-256'
+      model: 'GS21-GRAY-256',
     },
     {
       product: tshirt,
       branch: branches[0],
       quantity: 100,
-      model: 'DFT-BLACK-M'
-    }
+      model: 'DFT-BLACK-M',
+    },
   ];
 
   await stockRepository.save(stocks);
   console.log('✅ Seeded stocks successfully');
 };
-
 
 async function runSeeder() {
   const dataSource = new DataSource({
@@ -429,13 +486,16 @@ async function runSeeder() {
 
   try {
     await dataSource.initialize();
-    const tables = await dataSource.query(`SELECT tablename FROM pg_tables WHERE schemaname = 'public'; `);
-    const tableNames = tables.map((t: { tablename: string }) => `"${t.tablename}"`).join(', ');
+    // const tables = await dataSource.query(`SELECT tablename FROM pg_tables WHERE schemaname = 'public'; `);
+    // const tableNames = tables.map((t: { tablename: string }) => `"${t.tablename}"`).join(', ');
 
-    await dataSource.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
+    // await dataSource.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
 
-    await seedRoles(dataSource);
-    await seedUsers(dataSource);
+    // await seedRoles(dataSource);
+    // await seedUsers(dataSource);
+
+    // await seedPermissions(dataSource);
+		await seedSuperAdminRole(dataSource);
 
     // await seedCountries(dataSource);
     // await seedRegions(dataSource);

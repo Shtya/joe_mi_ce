@@ -8,17 +8,21 @@ import { CreateAuditDto, QueryAuditsDto, UpdateAuditDto, UpdateAuditStatusDto } 
 import { Audit } from 'entities/audit.entity';
 import { AuditsService } from './audit.service';
 import { CRUD } from 'common/crud.service';
+import { Permissions } from 'decorators/permissions.decorators';
+import { EPermission } from 'enums/Permissions.enum';
 
 @Controller('audits')
 export class AuditsController {
   constructor(private readonly service: AuditsService) {}
 
   @Post()
+  @Permissions(EPermission.AUDIT_CREATE)
   create(@Body() dto: CreateAuditDto) {
     return this.service.create(dto);
   }
 
   @Get('')
+  @Permissions(EPermission.AUDIT_READ)
   async getAudit(@Query() query) {
     return CRUD.findAll(
       this.service.repo,
@@ -35,27 +39,32 @@ export class AuditsController {
   }
 
   @Get(':id')
+  @Permissions(EPermission.AUDIT_READ)
   findOne(@Param('id', new ParseUUIDPipe()) id: string) {
     return CRUD.findOne(this.service.repo, 'audit', id, ['product']);
   }
 
   @Patch(':id')
+  @Permissions(EPermission.AUDIT_UPDATE)
   update(@Param('id', new ParseUUIDPipe()) id: string, @Body() dto: UpdateAuditDto) {
     return this.service.update(id, dto);
   }
 
   @Patch(':id/status')
+  @Permissions(EPermission.AUDIT_STATUS_UPDATE)
   updateStatus(@Param('id', new ParseUUIDPipe()) id: string, @Body() dto: UpdateAuditStatusDto) {
     return this.service.updateStatus(id, dto);
   }
 
   @Delete(':id')
+  @Permissions(EPermission.AUDIT_DELETE)
   remove(@Param('id', new ParseUUIDPipe()) id: string) {
     return CRUD.softDelete(this.service.repo, 'audit', id);
   }
 
   // في audits.controller.ts
   @Get('by-product/:productId')
+  @Permissions(EPermission.AUDIT_READ)
   byProduct(@Param('productId', new ParseUUIDPipe()) productId: string, @Query() query: any) {
     return CRUD.findAll(
       this.service.repo,
@@ -71,9 +80,9 @@ export class AuditsController {
     );
   }
 
-  
   @Get('by-branch/:branchId')
-  byBranch(@Param('branchId', new ParseUUIDPipe()) branchId: string, @Query() query:any) {
+  @Permissions(EPermission.AUDIT_READ)
+  byBranch(@Param('branchId', new ParseUUIDPipe()) branchId: string, @Query() query: any) {
     return CRUD.findAll(
       this.service.repo,
       'audit',
@@ -84,7 +93,7 @@ export class AuditsController {
       query.sortOrder,
       [], // relation
       [], // search
-      { branchId}, // filter
+      { branchId }, // filter
     );
 
     // return this.service.findByBranch(branchId, q);
@@ -92,6 +101,7 @@ export class AuditsController {
 
   // GET بحسب المروّج
   @Get('by-promoter/:promoterId')
+  @Permissions(EPermission.AUDIT_READ)
   byPromoter(@Param('promoterId', new ParseUUIDPipe()) promoterId: string, @Query() query: any) {
     return CRUD.findAll(
       this.service.repo,
@@ -103,7 +113,7 @@ export class AuditsController {
       query.sortOrder,
       [], // relation
       [], // search
-      { promoterId}, // filter
+      { promoterId }, // filter
     );
   }
 }

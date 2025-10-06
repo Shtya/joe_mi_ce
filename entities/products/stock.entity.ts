@@ -13,7 +13,6 @@ export class Stock extends CoreEntity {
   @JoinColumn({ name: 'branch_id' })
   branch: Branch;
 
-  @ManyToOne(() => Product, product => product.stock )
-  // @JoinColumn({ name: 'product_id' })
+  @ManyToOne(() => Product, product => product.stock , {eager : true} )
   product: Product;
 }
