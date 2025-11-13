@@ -212,7 +212,7 @@ export class AuthService {
       is_active: userWithRelations.is_active,
     };
   }
-  async getUserById(userId: string) {
+  async getUserById(userId: number) {
     const userWithRelations = await this.userRepository.findOne({
       where: { id: userId },
       relations: ['role', 'project', 'branch', 'created_by'],

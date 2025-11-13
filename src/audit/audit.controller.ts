@@ -2,7 +2,7 @@
 // - cannot make audit in the same daay again
 // - if there an promoter will mke audit on the
 
-import { Controller, Post, Get, Patch, Delete, Param, Body, Query, ParseUUIDPipe } from '@nestjs/common';
+import { Controller, Post, Get, Patch, Delete, Param, Body, Query,  ParseIntPipe } from '@nestjs/common';
 
 import { CreateAuditDto, QueryAuditsDto, UpdateAuditDto, UpdateAuditStatusDto } from 'dto/audit.dto';
 import { Audit } from 'entities/audit.entity';
@@ -40,32 +40,32 @@ export class AuditsController {
 
   @Get(':id')
   @Permissions(EPermission.AUDIT_READ)
-  findOne(@Param('id', new ParseUUIDPipe()) id: string) {
+  findOne(@Param('id', new ParseIntPipe()) id: number) {
     return CRUD.findOne(this.service.repo, 'audit', id, ['product']);
   }
 
   @Patch(':id')
   @Permissions(EPermission.AUDIT_UPDATE)
-  update(@Param('id', new ParseUUIDPipe()) id: string, @Body() dto: UpdateAuditDto) {
+  update(@Param('id', new ParseIntPipe()) id: number, @Body() dto: UpdateAuditDto) {
     return this.service.update(id, dto);
   }
 
   @Patch(':id/status')
   @Permissions(EPermission.AUDIT_STATUS_UPDATE)
-  updateStatus(@Param('id', new ParseUUIDPipe()) id: string, @Body() dto: UpdateAuditStatusDto) {
+  updateStatus(@Param('id', new ParseIntPipe()) id: number, @Body() dto: UpdateAuditStatusDto) {
     return this.service.updateStatus(id, dto);
   }
 
   @Delete(':id')
   @Permissions(EPermission.AUDIT_DELETE)
-  remove(@Param('id', new ParseUUIDPipe()) id: string) {
+  remove(@Param('id', new ParseIntPipe()) id: number) {
     return CRUD.softDelete(this.service.repo, 'audit', id);
   }
 
   // في audits.controller.ts
   @Get('by-product/:productId')
   @Permissions(EPermission.AUDIT_READ)
-  byProduct(@Param('productId', new ParseUUIDPipe()) productId: string, @Query() query: any) {
+  byProduct(@Param('productId', new ParseIntPipe()) productId: string, @Query() query: any) {
     return CRUD.findAll(
       this.service.repo,
       'audit',
@@ -82,7 +82,7 @@ export class AuditsController {
 
   @Get('by-branch/:branchId')
   @Permissions(EPermission.AUDIT_READ)
-  byBranch(@Param('branchId', new ParseUUIDPipe()) branchId: string, @Query() query: any) {
+  byBranch(@Param('branchId', new ParseIntPipe()) branchId: string, @Query() query: any) {
     return CRUD.findAll(
       this.service.repo,
       'audit',
@@ -102,7 +102,7 @@ export class AuditsController {
   // GET بحسب المروّج
   @Get('by-promoter/:promoterId')
   @Permissions(EPermission.AUDIT_READ)
-  byPromoter(@Param('promoterId', new ParseUUIDPipe()) promoterId: string, @Query() query: any) {
+  byPromoter(@Param('promoterId', new ParseIntPipe()) promoterId: string, @Query() query: any) {
     return CRUD.findAll(
       this.service.repo,
       'audit',

@@ -25,7 +25,7 @@ export class ProjectController {
   // 🔹 Get teams of a specific project
   @Get(':projectId/teams')
   @Permissions(EPermission.PROJECT_READ)
-  async getTeamsByProject(@Param('projectId') projectId: string) {
+  async getTeamsByProject(@Param('projectId') projectId: number) {
     return this.projectService.findTeamsByProject(projectId);
   }
 
@@ -53,7 +53,7 @@ export class ProjectController {
   // 🔹 Soft delete project (super admin only)
   @Delete(':id')
   @Permissions(EPermission.PROJECT_DELETE)
-  async delete(@Param('id') id: UUID, @Req() req: any) {
+  async delete(@Param('id') id: number, @Req() req: any) {
     if (req.user.role?.name !== 'super_admin') {
       throw new ForbiddenException('Only super admin can delete projects');
     }
@@ -63,7 +63,7 @@ export class ProjectController {
   // 🔹 Inactivate project (super admin only)
   @Patch(':id/inactivate')
   @Permissions(EPermission.PROJECT_INACTIVATE)
-  async inactivateProject(@Param('id') id: UUID, @Req() req: any) {
+  async inactivateProject(@Param('id') id: number, @Req() req: any) {
     if (req.user.role?.name !== 'super_admin') {
       throw new ForbiddenException('Only super admin can inactivate projects');
     }

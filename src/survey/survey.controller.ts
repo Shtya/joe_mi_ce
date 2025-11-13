@@ -29,14 +29,14 @@ export class SurveyController {
   // 🔹 Get feedback by promoter
   @Get('feedback/by-promoter/:promoterId')
   @Permissions(EPermission.SURVEY_FEEDBACK_READ)
-  async getByPromoter(@Param('promoterId') promoterId: string) {
+  async getByPromoter(@Param('promoterId') promoterId: number) {
     return this.surveyService.getFeedbackByPromoter(promoterId);
   }
 
   // 🔹 Get feedback by survey
   @Get('feedback/by-survey/:surveyId')
   @Permissions(EPermission.SURVEY_FEEDBACK_READ)
-  async getBySurvey(@Param('surveyId') surveyId: string) {
+  async getBySurvey(@Param('surveyId') surveyId: number) {
     return this.surveyService.getFeedbackBySurvey(surveyId);
   }
 
@@ -50,21 +50,21 @@ export class SurveyController {
   // 🔹 Get survey by ID
   @Get(':id')
   @Permissions(EPermission.SURVEY_READ)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return CRUD.findOne(this.surveyService.surveyRepo, 'survey', id);
   }
 
   // 🔹 Update survey
   @Patch(':id')
   @Permissions(EPermission.SURVEY_UPDATE)
-  update(@Param('id') id: string, @Body() dto: UpdateSurveyDto) {
+  update(@Param('id') id: number, @Body() dto: UpdateSurveyDto) {
     return this.surveyService.update(id, dto);
   }
 
   // 🔹 Delete survey
   @Delete(':id')
   @Permissions(EPermission.SURVEY_DELETE)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return CRUD.softDelete(this.surveyService.surveyRepo, 'survey', id);
   }
 }

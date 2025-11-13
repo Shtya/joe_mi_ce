@@ -5,10 +5,10 @@ import { Region } from './region.entity';
 
 @Entity('countries')
 export class Country {
-  @PrimaryGeneratedColumn('uuid')
+  @PrimaryGeneratedColumn()
   id: string;
 
-  @Column({ unique: true })
+  // @Column({ unique: true })
   name: string;
 
   @OneToMany(() => Region, region => region.country, { cascade: true })

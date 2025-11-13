@@ -4,7 +4,7 @@ import { CoreEntity } from 'entities/core.entity';
 import { Branch } from 'entities/branch.entity';
   
 @Entity('stocks')
-@Unique(['product', 'branch'])
+// @Unique(['product', 'branch'])
 export class Stock extends CoreEntity {
   @Column('int')
   quantity: number;

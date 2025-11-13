@@ -66,7 +66,7 @@ async Create(dto: CreateAssetDto, file: any, user: User) {
 }
 
 
-  async update(id: string, dto: UpdateAssetDto, file?: any) {
+  async update(id: number, dto: UpdateAssetDto, file?: any) {
     const asset = await this.assetRepo.findOne({ where: { id } });
     if (!asset) throw new NotFoundException('Asset not found');
 
@@ -89,7 +89,7 @@ async Create(dto: CreateAssetDto, file: any, user: User) {
     return this.assetRepo.save(asset);
   }
 
-  async delete(id: string) {
+  async delete(id: number) {
     const asset = await this.assetRepo.findOne({ where: { id } });
     if (!asset) throw new NotFoundException('Asset not found');
 
@@ -102,11 +102,11 @@ async Create(dto: CreateAssetDto, file: any, user: User) {
     return this.assetRepo.remove(asset);
   }
 
-  async findAllByUser(userId: any) {
+  async findAllByUser(userId: number) {
     return this.assetRepo.find({ where: { user: { id: userId } }, order: { created_at: 'DESC' } });
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const asset = await this.assetRepo.findOne({ where: { id } });
     if (!asset) throw new NotFoundException('Asset not found');
     return asset;

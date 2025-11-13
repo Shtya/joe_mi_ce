@@ -13,14 +13,11 @@ export class CreateSaleDto {
   @IsEnum(['completed', 'returned', 'canceled'])
   status: string;
 
-  @IsUUID()
-  productId: string;
+  productId: number;
 
-  @IsUUID()
-  userId: string;
+  userId: number;
 
-  @IsUUID()
-  branchId: string;
+  branchId: number;
 }
 
 export class UpdateSaleDto extends PartialType(CreateSaleDto) {}

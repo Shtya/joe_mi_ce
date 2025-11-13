@@ -64,7 +64,7 @@ export class VacationService {
   }
 
   // Get all vacations of a user
-  async getVacationsByUser(userId: string): Promise<Vacation[]> {
+  async getVacationsByUser(userId: number): Promise<Vacation[]> {
     const user = await this.userRepo.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException(`User with id ${userId} not found`);
@@ -74,7 +74,7 @@ export class VacationService {
   }
 
   // Update vacation status (approved/rejected)
-  async updateVacationStatus(id: string, dto: UpdateVacationDto): Promise<Vacation> {
+  async updateVacationStatus(id: number, dto: UpdateVacationDto): Promise<Vacation> {
     // Step 1: Find the vacation by ID
     const vacation = await this.vacationRepo.findOne({ where: { id }, relations: ['user'] });
 

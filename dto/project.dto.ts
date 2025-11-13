@@ -19,7 +19,6 @@ export class CreateProjectDto {
   status?: ProjectStatus = ProjectStatus.ACTIVE;
 
   @IsOptional()
-  @IsUUID()
   @ValidateIf(o => o.supervisor_id !== null)
   supervisor_id?: string | null;
 

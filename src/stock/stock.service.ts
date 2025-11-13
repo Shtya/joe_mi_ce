@@ -15,8 +15,8 @@ type OutOfStockItem = {
 type OutOfStockResponse = {
   mode: 'per-branch' | 'aggregate';
   threshold: number;
-  branchId?: string;
-  productId?: string;
+  branchId?: number;
+  productId?: number;
   items: OutOfStockItem[];
   count: number;
 };
@@ -79,7 +79,7 @@ export class StockService {
     return this.stockRepo.save(stock);
   }
 
-  async getStocksByBranch(branchId: string): Promise<Stock[]> {
+  async getStocksByBranch(branchId: number): Promise<Stock[]> {
     const branch = await this.branchRepo.findOne({ where: { id: branchId } });
     if (!branch) {
       throw new NotFoundException(`Branch with ID ${branchId} not found`);
@@ -91,7 +91,7 @@ export class StockService {
     });
   }
 
-  async getStocksByProduct(productId: string): Promise<Stock[]> {
+  async getStocksByProduct(productId: number): Promise<Stock[]> {
     const product = await this.productRepo.findOne({ where: { id: productId } });
     if (!product) {
       throw new NotFoundException(`Product with ID ${productId} not found`);
@@ -104,7 +104,7 @@ export class StockService {
   }
 
   // stock.service.ts
-  async getOutOfStockSmart(opts: { branchId?: string; productId?: string; threshold?: number }): Promise<OutOfStockResponse> {
+  async getOutOfStockSmart(opts: { branchId?: number; productId?: number; threshold?: number }): Promise<OutOfStockResponse> {
     const { branchId, productId, threshold = 0 } = opts;
     if (productId) {
       return this.getOutOfStock({ branchId, productId, threshold });
@@ -112,7 +112,7 @@ export class StockService {
     return this.getOutOfStockAggregated({ branchId, threshold });
   }
 
-  async getOutOfStock(opts: { branchId?: string; productId?: string; threshold?: number }): Promise<OutOfStockResponse> {
+  async getOutOfStock(opts: { branchId?: number; productId?: number; threshold?: number }): Promise<OutOfStockResponse> {
     const { branchId, productId, threshold = 0 } = opts;
 
     if (branchId) {
@@ -150,7 +150,7 @@ export class StockService {
     };
   }
 
-  async getOutOfStockAggregated(opts: { branchId?: string; threshold?: number }): Promise<OutOfStockResponse> {
+  async getOutOfStockAggregated(opts: { branchId?: number; threshold?: number }): Promise<OutOfStockResponse> {
     const { branchId, threshold = 0 } = opts;
 
     // تجميعة آمنة بلا سحب stock.id

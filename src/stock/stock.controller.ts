@@ -22,21 +22,21 @@ export class StockController {
   // 🔹 Get stocks by product
   @Get('product/:productId')
   @Permissions(EPermission.STOCK_READ)
-  getStocksByProduct(@Param('productId') productId: string) {
+  getStocksByProduct(@Param('productId') productId: number) {
     return this.stockService.getStocksByProduct(productId);
   }
 
   // 🔹 Get stocks by branch
   @Get('branch/:branchId')
   @Permissions(EPermission.STOCK_READ)
-  getStocksByBranch(@Param('branchId') branchId: string) {
+  getStocksByBranch(@Param('branchId') branchId: number) {
     return this.stockService.getStocksByBranch(branchId);
   }
 
   // 🔹 Smart check for out-of-stock products
   @Get('out-of-stock')
   @Permissions(EPermission.STOCK_ANALYZE)
-  async outOfStockSmart(@Query('branchId') branchId?: string, @Query('productId') productId?: string, @Query('threshold') threshold = '0') {
+  async outOfStockSmart(@Query('branchId') branchId?: number, @Query('productId') productId?: number, @Query('threshold') threshold = '0') {
     if (!branchId) {
       throw new BadRequestException('branchId is required');
     }

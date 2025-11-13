@@ -2,13 +2,11 @@ import { PartialType } from '@nestjs/mapped-types';
 import { IsNotEmpty, IsUUID, IsInt, IsString, IsOptional } from 'class-validator';
 
 export class CreateStockDto {
-  @IsUUID()
   @IsNotEmpty()
-  product_id: string;
+  product_id: number;
 
-  @IsUUID()
   @IsNotEmpty()
-  branch_id: string;
+  branch_id: number;
 
   @IsInt()
   @IsNotEmpty()

@@ -2,22 +2,18 @@ import { IsUUID, IsArray, ValidateNested, IsString } from 'class-validator';
 import { Type } from 'class-transformer';
 
 class FeedbackAnswerDto {
-  @IsUUID()
-  questionId: string;
+  questionId: number;
 
   @IsString()
   answer: string;
 }
 
 export class CreateSurveyFeedbackDto {
-  @IsUUID()
-  userId: string;
+  userId: number;
 
-  @IsUUID()
-  branchId: string;
+  branchId: number;
 
-  @IsUUID()
-  surveyId: string;
+  surveyId: number;
 
   @IsArray()
   @ValidateNested({ each: true })

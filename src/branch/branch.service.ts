@@ -97,7 +97,7 @@ export class BranchService {
     return await this.branchRepo.save(branch);
   }
 
-  async assignSupervisor(branchId: string, userId: string, user: User): Promise<Branch> {
+  async assignSupervisor(branchId: number, userId: number, user: User): Promise<Branch> {
     const branch = await this.branchRepo.findOne({
       where: { id: branchId },
       relations: ['project', 'project.owner', 'supervisor'],
@@ -139,7 +139,7 @@ export class BranchService {
     return this.branchRepo.save(branch);
   }
 
-  async assignPromoter(projectId: string, branchId: string, dto: AssignPromoterDto, currentUser: User): Promise<{ message: string }> {
+  async assignPromoter(projectId: number, branchId: number, dto: AssignPromoterDto, currentUser: User): Promise<{ message: string }> {
     const branch = await this.branchRepo.findOne({
       where: { id: branchId },
       relations: ['project', 'project.owner', 'team'],
@@ -195,7 +195,7 @@ export class BranchService {
     return { message: 'Promoter assigned successfully' };
   }
 
-  async update(id: string, dto: UpdateBranchDto, user: User): Promise<Branch> {
+  async update(id: number, dto: UpdateBranchDto, user: User): Promise<Branch> {
     const branch = await this.branchRepo.findOne({ where: { id }, relations: ['project', 'project.owner'] });
     if (!branch) throw new NotFoundException('Branch not found');
     if (branch.project.owner.id !== user.id) throw new ForbiddenException('Access denied');
@@ -210,13 +210,13 @@ export class BranchService {
     return this.branchRepo.save(branch);
   }
 
-  async findOne(id: string): Promise<Branch> {
+  async findOne(id: number): Promise<Branch> {
     const branch = await this.branchRepo.findOne({ where: { id }, relations: ['project', 'city', 'chain', 'supervisor', 'team'] });
     if (!branch) throw new NotFoundException('Branch not found');
     return branch;
   }
 
-  async remove(id: string, user: User) {
+  async remove(id: number, user: User) {
     const branch = await this.branchRepo.findOne({ where: { id }, relations: ['project', 'project.owner'] });
     if (!branch) throw new NotFoundException('Branch not found');
     if (branch.project.owner.id !== user.id) throw new ForbiddenException('Access denied');

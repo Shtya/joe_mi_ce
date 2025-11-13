@@ -12,7 +12,6 @@ export class CreateRegionDto {
   @IsNotEmpty()
   name: string;
 
-  @IsUUID()
   @IsNotEmpty()
   countryId: string;
 }
@@ -22,7 +21,6 @@ export class CreateCityDto {
   @IsNotEmpty()
   name: string;
 
-  @IsUUID()
   @IsNotEmpty()
   regionId: string;
 }

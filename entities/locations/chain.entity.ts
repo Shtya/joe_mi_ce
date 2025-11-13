@@ -4,8 +4,8 @@ import { Entity, Column, OneToMany, PrimaryGeneratedColumn, CreateDateColumn } f
 
 @Entity('chains')
 export class Chain {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column({ unique: true })
   name: string;

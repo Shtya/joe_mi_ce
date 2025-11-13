@@ -35,42 +35,42 @@ export class SaleController {
   // 🔹 Get sale by ID
   @Get(':id')
   @Permissions(EPermission.SALE_READ)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return CRUD.findOne(this.saleService.saleRepo, 'sale', id, ['product', 'user', 'branch']);
   }
 
   // 🔹 Delete sale
   @Delete(':id')
   @Permissions(EPermission.SALE_DELETE)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return CRUD.softDelete(this.saleService.saleRepo, 'sale', id);
   }
 
   // 🔹 Cancel or return a sale
   @Post(':id/return')
   @Permissions(EPermission.SALE_RETURN)
-  cancelOrReturn(@Param('id') id: string) {
+  cancelOrReturn(@Param('id') id: number) {
     return this.saleService.cancelOrReturn(id);
   }
 
   // 🔹 Get sales by branch
   @Get('by-branch/:branchId')
   @Permissions(EPermission.SALE_READ)
-  findByBranch(@Param('branchId') branchId: string, @Query() query: any) {
+  findByBranch(@Param('branchId') branchId: number, @Query() query: any) {
     return CRUD.findAll(this.saleService.saleRepo, 'sale', query.search, query.page, query.limit, query.sortBy, query.sortOrder, ['branch'], ['status'], { branch: { id: branchId } });
   }
 
   // 🔹 Get sales by product
   @Get('by-product/:productId')
   @Permissions(EPermission.SALE_READ)
-  findByProduct(@Param('productId') productId: string, @Query() query: any) {
+  findByProduct(@Param('productId') productId: number, @Query() query: any) {
     return CRUD.findAll(this.saleService.saleRepo, 'sale', query.search, query.page, query.limit, query.sortBy, query.sortOrder, ['product'], ['status'], { product: { id: productId } });
   }
 
   // 🔹 Get sales by user
   @Get('by-user/:userId')
   @Permissions(EPermission.SALE_READ)
-  findByUser(@Param('userId') userId: string, @Query() query: any) {
+  findByUser(@Param('userId') userId: number, @Query() query: any) {
     return CRUD.findAll(this.saleService.saleRepo, 'sale', query.search, query.page, query.limit, query.sortBy, query.sortOrder, ['user'], ['status'], { user: { id: userId } });
   }
 }

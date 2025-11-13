@@ -1,6 +1,8 @@
-import { IsString, IsOptional, IsUrl, IsUUID } from 'class-validator';
+import { IsString, IsOptional, IsUrl, IsUUID, IsNumber } from 'class-validator';
 
 export class CreateCompetitorDto {
+  @IsNumber()
+  id:number;
   @IsString()
   name: string;
 
@@ -8,8 +10,7 @@ export class CreateCompetitorDto {
   @IsUrl()
   logo_url: string;
 
-  @IsUUID()
-  projectId: string;
+  projectId: number;
 }
 
 export class UpdateCompetitorDto {
@@ -21,6 +22,5 @@ export class UpdateCompetitorDto {
   @IsUrl()
   logo_url: string;
 
-  @IsUUID()
-  projectId: string;
+  projectId: number;
 }

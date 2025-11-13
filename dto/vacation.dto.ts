@@ -10,9 +10,8 @@ export class UpdateVacationDto {
   @IsOptional()
   status: string;
 
-  @IsUUID()
   @IsOptional()
-  processedById: string;
+  processedById: number;
 
   @IsDateString()
   @IsOptional()
@@ -26,11 +25,9 @@ export class UpdateVacationDto {
 }
 
 export class CreateVacationDto {
-  @IsUUID()
-  userId: string;
+  userId: number;
 
-  @IsUUID()
-  branchId: string;
+  branchId: number;
 
   @IsDateString()
   start_date: Date;

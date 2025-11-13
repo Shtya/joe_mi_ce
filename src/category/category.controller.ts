@@ -26,19 +26,19 @@ export class CategoryController {
 
   @Get(':id')
   @Permissions(EPermission.CATEGORY_READ)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.categoryService.findOne(id);
   }
 
   @Put(':id')
   @Permissions(EPermission.CATEGORY_UPDATE)
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
+  update(@Param('id') id: number, @Body() updateCategoryDto: UpdateCategoryDto) {
     return this.categoryService.update(id, updateCategoryDto);
   }
 
   @Delete(':id')
   @Permissions(EPermission.CATEGORY_DELETE)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return CRUD.delete(this.categoryService.categoryRepository, 'category', id);
   }
 }

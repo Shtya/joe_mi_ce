@@ -4,7 +4,7 @@ import { CoreEntity } from './core.entity';
 
 @Entity('permissions')
 export class Permission extends CoreEntity {
-  @Column({ unique: true })
+  // @Column({ unique: true })
   name: string;
 
   @Column({ nullable: true })

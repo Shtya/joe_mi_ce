@@ -5,7 +5,6 @@ import {   UpdateProjectDto } from 'dto/project.dto';
 import { Project } from 'entities/project.entity';
 import { User } from 'entities/user.entity';
 import { In, Repository } from 'typeorm';
-import { UUID } from 'crypto';
 import { ERole } from 'enums/Role.enum';
 import { plainToInstance } from 'class-transformer';
 import { Shift } from 'entities/employee/shift.entity';
@@ -20,7 +19,7 @@ export class ProjectService extends BaseService<Project> {
   ) {
     super(projectRepo);
   }
-  async findTeamsByProject(projectId: string): Promise<User[]> {
+  async findTeamsByProject(projectId: number): Promise<User[]> {
     return this.userRepo.find({
       where: {
         project_id: projectId,
@@ -29,7 +28,7 @@ export class ProjectService extends BaseService<Project> {
     });
   }
 
-  async put(dto: UpdateProjectDto, updaterId: UUID): Promise<Project> {
+  async put(dto: UpdateProjectDto, updaterId: number): Promise<Project> {
     const project = await this.projectRepo.findOne({
       where: { owner: { id: updaterId } },
       relations: ['owner'],
@@ -81,7 +80,7 @@ export class ProjectService extends BaseService<Project> {
     return JSON.parse(JSON.stringify(merged, (key, value) => (['created_at', 'updated_at', 'deleted_at'].includes(key) ? undefined : value)));
   }
 
-  async inactivate(id: UUID): Promise<Project> {
+  async inactivate(id: number): Promise<Project> {
     const project = await this.projectRepo.findOne({ where: { id } });
     if (!project) throw new NotFoundException('Project not found');
 

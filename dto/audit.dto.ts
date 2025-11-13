@@ -3,7 +3,6 @@ import {
   IsOptional,
   IsNumber,
   IsString,
-  IsUUID,
   IsArray,
   IsEnum,
   IsDateString,
@@ -36,14 +35,11 @@ class CompetitorDto {
 }
 
 export class CreateAuditDto {
-  @IsUUID()
-  branch_id: string;
+  branch_id: number;
 
-  @IsUUID()
-  promoter_id: string;
+  promoter_id: number;
 
-  @IsUUID()
-  product_id: string;
+  product_id: number;
 
   @IsString()
   product_name: string;
@@ -95,7 +91,7 @@ export class QueryAuditsDto {
   @IsOptional() @IsEnum(AuditStatus)
   status?: AuditStatus;
 
-  @IsOptional() @IsUUID()
+  @IsOptional() 
   product_id?: string;
 
   @IsOptional() @IsDateString()
@@ -116,8 +112,8 @@ export class UpdateAuditStatusDto {
   @IsEnum(AuditStatus)
   status: AuditStatus;
 
-  @IsOptional() @IsUUID()
-  reviewed_by_id?: string;
+  @IsOptional() 
+  reviewed_by_id?: number;
 
   @IsOptional() @IsDateString()
   reviewed_at?: string; // ISO date string

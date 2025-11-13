@@ -51,7 +51,7 @@ export class SaleService {
     return this.saleRepo.save(sale);
   }
 
-  async cancelOrReturn(id: string) {
+  async cancelOrReturn(id: number) {
     const sale = await this.saleRepo.findOne({ where: { id }, relations: ['product', 'branch'] });
     if (!sale) throw new NotFoundException('Sale not found');
 

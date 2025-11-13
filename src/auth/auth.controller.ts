@@ -61,7 +61,7 @@ export class AuthController {
   @UseGuards(AuthGuard)
   @Get('users/:id')
 	@Permissions(EPermission.USER_READ)
-  async getUserById( @Param("id") userId : string) {
+  async getUserById( @Param("id") userId : number) {
     return this.authService.getUserById(userId);
   }
 

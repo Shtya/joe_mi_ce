@@ -43,7 +43,7 @@ export class CompetitorService {
     return competitor;
   }
 
-  async updateCompetitor(id: string, dto: UpdateCompetitorDto): Promise<Competitor> {
+  async updateCompetitor(id: number, dto: UpdateCompetitorDto): Promise<Competitor> {
     const competitor = await this.competitorRepo.findOne({
       where: { id },
       relations: ['project'],

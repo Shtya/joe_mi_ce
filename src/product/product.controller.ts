@@ -26,37 +26,37 @@ export class ProductController {
 
   @Get(':id')
   @Permissions(EPermission.PRODUCT_READ)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.productService.findOne(id);
   }
 
   @Put(':id')
   @Permissions(EPermission.PRODUCT_UPDATE)
-  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+  update(@Param('id') id: number, @Body() updateProductDto: UpdateProductDto) {
     return this.productService.update(id, updateProductDto);
   }
 
   @Delete(':id')
   @Permissions(EPermission.PRODUCT_DELETE)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return CRUD.softDelete(this.productService.productRepository, 'product', id);
   }
 
   @Get('by-category/:categoryId')
   @Permissions(EPermission.PRODUCT_READ)
-  getProductsByCategory(@Param('categoryId') categoryId: string) {
+  getProductsByCategory(@Param('categoryId') categoryId: number) {
     return this.productService.getProductsByCategory(categoryId);
   }
 
   @Get('by-brand/:brandId')
   @Permissions(EPermission.PRODUCT_READ)
-  getProductsByBrand(@Param('brandId') brandId: string) {
+  getProductsByBrand(@Param('brandId') brandId: number) {
     return this.productService.getProductsByBrand(brandId);
   }
 
   @Get('by-project/:projectId')
   @Permissions(EPermission.PRODUCT_READ)
-  getProductsByProject(@Param('projectId') projectId: string) {
+  getProductsByProject(@Param('projectId') projectId: number) {
     return this.productService.getProductsByProject(projectId);
   }
 }

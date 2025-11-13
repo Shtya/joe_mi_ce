@@ -10,7 +10,7 @@ import { Audit } from 'entities/audit.entity';
 
 @Entity('products')
 @Index(['brand', 'category'])
-@Unique(['name', 'project'])
+// @Unique(['name', 'project'])
 export class Product extends CoreEntity {
   @Column()
   name: string;

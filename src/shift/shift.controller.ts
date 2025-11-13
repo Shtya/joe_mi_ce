@@ -28,21 +28,21 @@ export class ShiftController {
   // 🔹 Update a shift
   @Patch(':id')
   @Permissions(EPermission.SHIFT_UPDATE)
-  update(@Param('id') id: string, @Body() dto: UpdateShiftDto) {
+  update(@Param('id') id: number, @Body() dto: UpdateShiftDto) {
     return this.shiftService.update(id, dto);
   }
 
   // 🔹 Delete a shift
   @Delete(':id')
   @Permissions(EPermission.SHIFT_DELETE)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return CRUD.softDelete(this.shiftService.shiftRepo, 'shift', id);
   }
 
   // 🔹 Get shifts by project
   @Get('/by-project/:projectId')
   @Permissions(EPermission.SHIFT_READ)
-  findByProject(@Param('projectId') projectId: string, @Query() query) {
+  findByProject(@Param('projectId') projectId: number, @Query() query) {
     return CRUD.findAll(this.shiftService.shiftRepo, 'shift', query.search, query.page, query.limit, query.sortBy, query.sortOrder, ['project'], ['name'], { project: { id: projectId } });
   }
 }

@@ -22,11 +22,28 @@ export class JourneyController {
   async createUnplannedJourney(@Body() createUnplannedJourneyDto: CreateUnplannedJourneyDto, @Req() req) {
     return await this.journeyService.createUnplannedJourney(createUnplannedJourneyDto, req.user);
   }
-
-  @Get('by-user/:userId')
+  @Get('by-user')
   @Permissions(EPermission.JOURNEY_READ)
-  async findByUser(@Param('userId') userId: string, @Req() req, @Query() query) {
-    return CRUD.findAll(this.journeyService.journeyRepo, 'journey', query.search, query.page, query.limit, query.sortBy, query.sortOrder, ['branch', 'shift', 'user'], ['date'], { user: { id: userId } });
+  async findByUser( @Req() req, @Query() query) {
+    const userId = req.user.id;
+    const journeys = await this.journeyService.journeyRepo.find({
+      where: { user: { id: userId } },
+      relations: ['branch', 'shift', 'user'],
+      order: { date: query.sortOrder === 'ASC' ? 'ASC' : 'DESC' },
+    });
+    const customizedJourneys = journeys.map(j => ({
+      id: j.id,
+      date: j.date,
+      branchName: j.branch?.name,
+      shiftName: j.shift?.name,
+      user: j.user,
+      status: j.status,
+      checkIn: j.shift.startTime,
+      checkOut: j.shift.endTime,
+      location: j.branch.geo
+      
+    }));
+    return customizedJourneys;
   }
 
   @Get('by-branch/:branchId')

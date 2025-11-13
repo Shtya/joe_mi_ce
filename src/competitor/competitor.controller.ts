@@ -29,7 +29,7 @@ export class CompetitorController {
   // Get competitors by project
   @Get('by-project/:projectId')
   @Permissions(EPermission.COMPETITOR_READ)
-  async getCompetitorsByProject(@Param('projectId') projectId: UUID, @Query() query) {
+  async getCompetitorsByProject(@Param('projectId') projectId: number, @Query() query) {
     return CRUD.findAll(this.competitorService.competitorRepo, 'competitors', query.search, query.page, query.limit, query.sortBy, query.sortOrder, ['project'], ['name'], { project: { id: projectId } });
   }
 
@@ -43,14 +43,14 @@ export class CompetitorController {
   // Update a competitor by ID
   @Put(':id')
   @Permissions(EPermission.COMPETITOR_UPDATE)
-  async updateCompetitor(@Param('id') id: string, @Body() dto: UpdateCompetitorDto) {
+  async updateCompetitor(@Param('id') id: number, @Body() dto: UpdateCompetitorDto) {
     return await this.competitorService.updateCompetitor(id, dto);
   }
 
   // Delete a competitor by ID
   @Delete(':id')
   @Permissions(EPermission.COMPETITOR_DELETE)
-  async deleteCompetitor(@Param('id') id: string) {
+  async deleteCompetitor(@Param('id') id: number) {
     return CRUD.softDelete(this.competitorService.competitorRepo, 'competitors', id);
   }
 }

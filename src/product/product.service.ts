@@ -191,7 +191,7 @@ export class ProductService {
     return savedProduct;
   }
 
-  async findOne(id: string) {
+  async findOne(id: number) {
     const product = await this.productRepository.findOne({
       where: { id },
       relations: ['brand', 'category', 'stock', 'project'],
@@ -204,7 +204,7 @@ export class ProductService {
     return product;
   }
 
-  async update(id: string, dto: UpdateProductDto): Promise<Product> {
+  async update(id: number, dto: UpdateProductDto): Promise<Product> {
     const product = await this.findOne(id);
 
     if (dto.brand_id) {
@@ -236,12 +236,12 @@ export class ProductService {
     return this.productRepository.save(product);
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: number): Promise<void> {
     const product = await this.findOne(id);
     await this.productRepository.remove(product);
   }
 
-  async getProductsByProject(projectId: string, page = 1, limit = 10) {
+  async getProductsByProject(projectId: number, page = 1, limit = 10) {
     const project = await this.projectRepository.findOne({ where: { id: projectId } });
     if (!project) {
       throw new NotFoundException(`Project with ID ${projectId} not found`);
@@ -261,7 +261,7 @@ export class ProductService {
       records: data,
     };
   }
-  async getProductsByCategory(categoryId: string, page = 1, limit = 10) {
+  async getProductsByCategory(categoryId: number, page = 1, limit = 10) {
     const category = await this.categoryRepository.findOne({ where: { id: categoryId } });
     if (!category) {
       throw new NotFoundException(`Category with ID ${categoryId} not found`);
@@ -281,7 +281,7 @@ export class ProductService {
       records: data,
     };
   }
-  async getProductsByBrand(brandId: string, page = 1, limit = 10) {
+  async getProductsByBrand(brandId: number, page = 1, limit = 10) {
     const brand = await this.brandRepository.findOne({ where: { id: brandId } });
     if (!brand) {
       throw new NotFoundException(`Brand with ID ${brandId} not found`);

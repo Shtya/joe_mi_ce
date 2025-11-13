@@ -30,18 +30,15 @@ export class RegisterDto {
   image_url?: string;
 
   // For existing projects (when not creating new project)
-  @IsUUID()
   @IsOptional()
-  project_id?: string;
+  project_id?: number;
 
-  @IsUUID()
   @IsOptional()
-  manager_id?: string;
+  manager_id?: number;
 
   // Additional fields from your entity
-  @IsUUID()
   @IsOptional()
-  branch_id?: string;
+  branch_id?: number;
 }
 
 export class UpdateUserDto {
@@ -83,7 +80,6 @@ export class RefreshTokenDto {
 }
 
 export class ViewUserPasswordDto {
-  @IsUUID()
   @IsNotEmpty()
-  user_id: string;
+  user_id: number;
 }

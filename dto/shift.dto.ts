@@ -11,8 +11,7 @@ export class CreateShiftDto {
   @IsMilitaryTime()
   endTime: string;
 
-  @IsUUID()
-  projectId: string;
+  projectId: number;
 }
 import { PartialType } from '@nestjs/mapped-types';
 

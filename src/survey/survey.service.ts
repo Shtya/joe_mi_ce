@@ -69,14 +69,14 @@ export class SurveyService {
     return await this.feedbackRepo.save(feedback);
   }
 
-  async getFeedbackByPromoter(promoterId: string) {
+  async getFeedbackByPromoter(promoterId: number) {
     return await this.feedbackRepo.find({
       where: { user: { id: promoterId } },
       relations: ['survey', 'answers', 'answers.question'],
     });
   }
 
-  async getFeedbackBySurvey(surveyId: string) {
+  async getFeedbackBySurvey(surveyId: number) {
     return await this.feedbackRepo.find({
       where: { survey: { id: surveyId } },
       relations: ['user', 'answers', 'answers.question'],
@@ -87,19 +87,19 @@ export class SurveyService {
     return this.surveyRepo.find({ relations: ['questions'] });
   }
 
-  async findOne(id: string): Promise<Survey> {
+  async findOne(id: number): Promise<Survey> {
     const survey = await this.surveyRepo.findOne({ where: { id }, relations: ['questions'] });
     if (!survey) throw new NotFoundException('Survey not found');
     return survey;
   }
 
-  async update(id: string, dto: UpdateSurveyDto): Promise<Survey> {
+  async update(id: number, dto: UpdateSurveyDto): Promise<Survey> {
     const survey = await this.findOne(id);
     Object.assign(survey, dto);
     return this.surveyRepo.save(survey);
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: number): Promise<void> {
     const survey = await this.findOne(id);
     await this.surveyRepo.remove(survey);
   }

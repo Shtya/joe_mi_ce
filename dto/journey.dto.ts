@@ -4,14 +4,14 @@ import { IsUUID, IsDateString, IsArray, IsEnum } from 'class-validator';
 
 export class CreateJourneyPlanDto {
 
-  @IsUUID()
-  userId: string;
+  
+  userId: number;
 
-  @IsUUID()
-  branchId: string;
+  
+  branchId: number;
 
-  @IsUUID()
-  shiftId: string;
+  
+  shiftId: number;
 
   @IsDateString()
   fromDate: string;
@@ -35,14 +35,14 @@ export class UpdateJourneyPlanDto extends PartialType(CreateJourneyPlanDto) {}
 
   
 export class CreateUnplannedJourneyDto {
-  @IsUUID()
-  userId: string;
+  
+  userId: number;
 
-  @IsUUID()
-  branchId: string;
+  
+  branchId: number;
 
-  @IsUUID()
-  shiftId: string;
+  
+  shiftId: number;
 
   @IsDateString()
   date: string;

@@ -5,7 +5,7 @@ import { CoreEntity } from './core.entity';
 
 @Entity('roles')
 export class Role extends CoreEntity {
-  @Column({ unique: true })
+  // @Column({ unique: true })
   name: string;
 
   @Column({ nullable: true })

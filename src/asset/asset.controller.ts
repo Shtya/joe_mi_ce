@@ -53,20 +53,20 @@ export class AssetController {
 
   @Get(':id')
   @Permissions(EPermission.ASSET_READ)
-  async getAsset(@Param('id') id: string) {
+  async getAsset(@Param('id') id: number) {
     return this.assetService.findOne(id);
   }
 
   @Patch(':id')
   @Permissions(EPermission.ASSET_UPDATE)
   @UseInterceptors(FileInterceptor('file', multerOptions))
-  async updateAsset(@Param('id') id: string, @UploadedFile() file: any, @Body() dto: UpdateAssetDto) {
+  async updateAsset(@Param('id') id: number, @UploadedFile() file: any, @Body() dto: UpdateAssetDto) {
     return this.assetService.update(id, dto, file);
   }
 
   @Delete(':id')
   @Permissions(EPermission.ASSET_DELETE)
-  async deleteAsset(@Param('id') id: string) {
+  async deleteAsset(@Param('id') id: number) {
     return this.assetService.delete(id);
   }
 }

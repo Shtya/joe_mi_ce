@@ -49,25 +49,25 @@ export class BranchController {
 
   @Get(':branchId/teams')
   @Permissions(EPermission.BRANCH_READ)
-  async getTeamOnBranch(@Param('branchId') branchId: UUID, @Query() query: PaginationQueryDto, @Req() req: any) {
+  async getTeamOnBranch(@Param('branchId') branchId: number, @Query() query: PaginationQueryDto, @Req() req: any) {
     return CRUD.findAll(this.branchService.branchRepo, 'branch', query.search, query.page, query.limit, query.sortBy, query.sortOrder, ['supervisor', 'team'], ['name'], { id: branchId });
   }
 
   @Get(':id')
   @Permissions(EPermission.BRANCH_READ)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.branchService.findOne(id);
   }
 
   @Put(':id')
   @Permissions(EPermission.BRANCH_UPDATE)
-  update(@Param('id') id: string, @Request() req, @Body() dto: UpdateBranchDto) {
+  update(@Param('id') id: number, @Request() req, @Body() dto: UpdateBranchDto) {
     return this.branchService.update(id, dto, req.user);
   }
 
   @Post(':id/supervisor')
   @Permissions(EPermission.BRANCH_ASSIGN_SUPERVISOR)
-  assignSupervisor(@Param('id') id: string, @Body() dto, @Request() req) {
+  assignSupervisor(@Param('id') id: number, @Body() dto, @Request() req) {
     return this.branchService.assignSupervisor(id, dto.userId, req.user);
   }
 

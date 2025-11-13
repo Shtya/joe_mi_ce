@@ -43,13 +43,13 @@ export class ShiftService {
     return this.shiftRepo.save(shift);
   }
 
-  async findOne(id: string): Promise<Shift> {
+  async findOne(id: number): Promise<Shift> {
     const shift = await this.shiftRepo.findOne({ where: { id }, relations: ['project'] });
     if (!shift) throw new NotFoundException('Shift not found');
     return shift;
   }
 
-  async update(id: string, dto: UpdateShiftDto): Promise<Shift> {
+  async update(id: number, dto: UpdateShiftDto): Promise<Shift> {
     const shift = await this.findOne(id);
 
     // إذا تم تغيير التوقيت أو المشروع، تحقق من التداخل الزمني

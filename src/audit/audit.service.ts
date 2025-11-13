@@ -66,7 +66,7 @@ export class AuditsService {
     }
   }
 
-  async findOne(id: string): Promise<Audit> {
+  async findOne(id: number): Promise<Audit> {
     const audit = await this.repo.findOne({
       where: { id },
             relations: ['promoter', 'branch', 'reviewed_by'],
@@ -75,7 +75,7 @@ export class AuditsService {
     return audit;
   }
 
-  async update(id: string, dto: UpdateAuditDto): Promise<Audit> {
+  async update(id: number, dto: UpdateAuditDto): Promise<Audit> {
     const audit = await this.findOne(id);
 
     Object.assign(audit, {
@@ -106,7 +106,7 @@ export class AuditsService {
     }
   }
 
-  async updateStatus(id: string, dto: UpdateAuditStatusDto): Promise<Audit> {
+  async updateStatus(id: number, dto: UpdateAuditStatusDto): Promise<Audit> {
     const audit = await this.findOne(id);
     const user =  await this.userRepo.findOne({where :{id : dto.reviewed_by_id}})
     if (!user) throw new NotFoundException('User not found');

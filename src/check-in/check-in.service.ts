@@ -22,7 +22,7 @@ export class CheckInService {
     return distance <= branch.geofence_radius_meters;
   }
 
-  async createCheckIn(dto: CreateCheckInDto, userId: string) {
+  async createCheckIn(dto: CreateCheckInDto, userId: number) {
     const journey: Journey = await this.journeyRepo.findOne({
       where: { id: dto.journeyId, user: { id: userId } },
       relations: ['branch', 'shift'],

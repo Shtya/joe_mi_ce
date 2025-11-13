@@ -9,7 +9,6 @@ class GeoDto {
  
 
 export class AssignPromoterDto {
-  @IsUUID()
   promoterId: any;
 }
 
@@ -30,19 +29,19 @@ export class CreateBranchDto {
   image_url?: string;
 
   @IsString()
-  cityId: string;
+  cityId: number;
 
-  @IsString()
+  @IsNumber()
   @IsOptional()
-  chainId?: string;
+  chainId?: number;
 
    @IsString()
   @IsOptional()
-  supervisorId?: string;
+  supervisorId?: number;
 
   @IsArray()
   @IsOptional()
-  teamIds?: string[];
+  teamIds?: number[];
 }
 
 

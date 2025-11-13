@@ -26,19 +26,19 @@ export class BrandController {
 
   @Get(':id')
   @Permissions(EPermission.BRAND_READ)
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id') id: number) {
     return this.brandService.findOne(id);
   }
 
   @Put(':id')
   @Permissions(EPermission.BRAND_UPDATE)
-  update(@Param('id') id: string, @Body() updateBrandDto: UpdateBrandDto) {
+  update(@Param('id') id: number, @Body() updateBrandDto: UpdateBrandDto) {
     return this.brandService.update(id, updateBrandDto);
   }
 
   @Delete(':id')
   @Permissions(EPermission.BRAND_DELETE)
-  remove(@Param('id') id: string) {
+  remove(@Param('id') id: number) {
     return CRUD.delete(this.brandService.brandRepository, 'brand', id);
   }
 }

@@ -5,8 +5,8 @@ import { Branch } from 'entities/branch.entity';
 
 @Entity('cities')
 export class City {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
   @Column()
   name: string;
 

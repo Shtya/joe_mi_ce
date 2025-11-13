@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany, ManyToOne, JoinColumn, Index, OneToOne } from 'typeorm';
+import { Entity, Column, OneToMany, ManyToOne, JoinColumn, Index, OneToOne, Unique } from 'typeorm';
 import { CoreEntity } from './core.entity';
 import { Asset } from './assets.entity';
 import { Role } from './role.entity';
@@ -10,7 +10,7 @@ import { Journey } from './employee/journey.entity';
 import { Sale } from './products/sale.entity';
 
 @Entity('users')
-@Index(['username'], { unique: true })
+// @Unique('UQ_users_username', ['username'])
 export class User extends CoreEntity {
   @Column({ length: 50 })
   username: string;
@@ -31,10 +31,10 @@ export class User extends CoreEntity {
   device_id: string;
   
   @Column({nullable: true })
-  project_id: string;
+  project_id: number;
   
   @Column({nullable: true })
-  manager_id: string;
+  manager_id: number;
 
   @Column({ default: true })
   is_active: boolean;

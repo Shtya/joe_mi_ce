@@ -3,7 +3,7 @@ import { CoreEntity } from './core.entity';
 import { Project } from './project.entity';
 
 @Entity()
-@Unique(["name", "project"])  // Ensures that name is unique for each project
+// @Unique(["name", "project"])  // Ensures that name is unique for each project
 export class Competitor extends CoreEntity {
   @Column()
   name: string;

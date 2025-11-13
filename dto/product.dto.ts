@@ -4,8 +4,7 @@ import { Type } from 'class-transformer';
 
 class StockDto {
   @IsOptional()
-  @IsUUID()
-  branch_id?: string;
+  branch_id?: number;
 
   @IsNumber()
   quantity: number;
@@ -52,17 +51,14 @@ export class CreateProductDto {
   @IsBoolean()
   is_active?: boolean;
 
-  @IsUUID()
   @IsNotEmpty()
-  project_id: string;
+  project_id: number;
 
   @IsOptional()
-  @IsUUID()
-  brand_id?: string;
+  brand_id?: number;
 
-  @IsUUID()
   @IsNotEmpty()
-  category_id: string;
+  category_id: number;
 
   @IsOptional()
   @IsArray()
@@ -72,7 +68,6 @@ export class CreateProductDto {
 export class UpdateProductDto extends PartialType(CreateProductDto) {}
 
 export class GetProductsByBranchDto {
-  @IsUUID()
   @IsNotEmpty()
   branch_id: string;
 }

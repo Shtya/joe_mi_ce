@@ -2,12 +2,9 @@ import { IsDateString, IsString, IsOptional, IsNotEmpty, IsUUID } from 'class-va
 import { GeoLocation } from 'entities/geo.embeddable';
 
 export class CreateCheckInDto {
-  @IsUUID()
-  userId: string;
+  userId: number;
 
-  
-  @IsUUID()
-  journeyId: string;
+  journeyId: number;
 
   @IsDateString()
   checkInTime: Date;
